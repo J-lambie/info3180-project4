@@ -1,0 +1,14 @@
+
+<div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+<div class="form-group" ng-controller="LoginController">
+    <h1>Login In</h1>
+    <form method="post" ng-action="login()">
+       <label></br>Email: </br>
+          <input type="text" name="email" placeholder="Email" ng-model="loginForm.email" required/></label>
+          </br>
+          <label>Password: </br>
+          <input type="password" name="password" placeholder="Password"ng-model="loginForm.password" required/></label>
+        <input type="submit" class="btn btn-primary"ng-disabled="disabled"/>
+    </form>
+</div>  
+

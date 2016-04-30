@@ -1,12 +1,12 @@
 from app import app,db
-from flask import Flask, abort, request, jsonify, g, url_for, render_template
+from flask import Flask, abort, request, jsonify, g, url_for, render_template,session
 import requests
 from image_getter import image_dem
 from models import User,Wishlist
 
 @app.route('/')
 def home():
-    return render_template("home.html")
+    return app.send_static_file("base.html")
 
 @app.route('/api/thumbnails/process', methods=['POST'])
 def thumbnails():
@@ -51,8 +51,13 @@ def login():
         else:
             obj={'error':'1','data':{},'message':'Bad username or password'}
             return jsonify(obj)
-    if request.method=='GET':
-        return render_template("login.html");   
+
+    return jsonify({'result':'page loaded'});   
+
+@app.route('/api/user/logout')
+def logout():
+    session.pop('logged_in', None)
+    return jsonify({'result': 'logged out success'})
     
 @app.route('/api/user/<int:id>/wishlist',methods=['POST','GET'])
 def wishlist(id):

@@ -1,3 +1,19 @@
+angular.module('Wishlist').factory('AuthService',
+  ['$q', '$timeout', '$http',
+  function ($q, $timeout, $http) {
+  
+    // create user variable
+    var user = null;
+
+    // return available functions for use in controllers
+    return ({
+      isLoggedIn: isLoggedIn,
+      login: login,
+      logout: logout,
+      register: register
+    });
+
+}]);
 function isLoggedIn() {
   if(user) {
     return true;
@@ -57,13 +73,13 @@ function logout() {
 
 }
 
-function register(email, password) {
+function register(name,email, password) {
 
   // create a new instance of deferred
   var deferred = $q.defer();
 
   // send a post request to the server
-  $http.post('/api/user/register', {email: email, password: password})
+  $http.post('/api/user/register', {name:name,email: email, password: password})
     // handle success
     .success(function (data, status) {
       if(status === 200 && data.result){
@@ -80,4 +96,25 @@ function register(email, password) {
   // return promise object
   return deferred.promise;
 
+}
+
+function loginGet(){
+    // create a new instance of deferred
+  var deferred = $q.defer();
+
+  // send a get request to the server
+  $http.get('/api/user/login')
+    // handle success
+    .success(function (data) {
+      user = false;
+      deferred.resolve();
+    })
+    // handle error
+    .error(function (data) {
+      user = false;
+      deferred.reject();
+    });
+
+  // return promise object
+  return deferred.promise;
 }
